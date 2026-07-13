@@ -21,3 +21,7 @@ Thumbs.db
 
 # IDE
 .vscode/settings.json
+
+sensor-bridge/bin/
+sensor-bridge/obj/
+.env

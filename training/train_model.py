@@ -100,4 +100,5 @@ def main(csv_path: str, model_out: str = "thermal_model.joblib"):
     print(f"\nSaved trained model -> {model_out}")
 
 
-main("Final_plugged.csv")
+if __name__ == "__main__":
+    main("Final_plugged.csv")

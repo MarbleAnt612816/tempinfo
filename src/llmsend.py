@@ -31,7 +31,7 @@ You are an expert PC hardware diagnostic assistant. Translate this telemetry int
 
 Rules: 
 1. Output exactly one cohesive paragraph. Do not use bullet points, tables, markdown headers, or raw json structures. 
-2. Tell the user in plain English if their computer is healthy, running under standard heavy stress, or experiencing dangerous overheating. Explain to the user how this affects them in their real life (e.g. framing drops, safety shutoffs).
+2. Tell the user in plain English if their computer is healthy, running under standard heavy stress, or experiencing dangerous overheating. Explain to the user how this affects them in their real life (Causes slowness, loud fans etc)
 3. If the verdict is WARNING or BAD, use a simple real-world analogy to explain the specific offending metric (e.g., if the GPU Hotspot Delta is over 15-20°C, explain that the cooling paste might be drying up like old glue; if the 1% low CPU clock is significantly below average, explain that the processor is deliberately slamming on the brakes to keep from melting). 
 4. Provide 1 or 2 concrete, household solutions (e.g., clearing dust from side vents, shifting the case off thick carpet, or verifying fans are spinning). 
 5. Link a helpful tutorial video reference if actionable hardware adjustments are required.
@@ -50,7 +50,7 @@ def generate_report_via_api(prompt: str) -> str:
         # CORRECTED OFFICIAL STR INTERFACE IDENTIFIER FOR HAIKU 4.5
         message = client.messages.create(
             model="claude-haiku-4-5",
-            max_tokens=300,
+            max_tokens=400,
             temperature=0.4, 
             messages=[
                 {"role": "user", "content": prompt}

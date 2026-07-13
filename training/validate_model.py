@@ -198,4 +198,5 @@ def main(csv_path: str, model_out: str = "thermal_model_final.joblib"):
     train_final_model(df, feature_columns, model_out)
     check_final_model_on_synthetic(df, feature_columns, model_out)
 
-main("Final_plugged.csv")
+if __name__ == "__main__":
+    main("Final_plugged.csv")

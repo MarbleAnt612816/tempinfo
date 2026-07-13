@@ -21,25 +21,40 @@ three paths are guaranteed to produce identically-shaped summaries.
 import pandas as pd
 import numpy as np
 import joblib
+from src.feature_engineering import engineer_features
 
-
-# Sensor columns we report stats on, matched by stable substring
-# (same approach as feature_engineering.py, to survive the degree-symbol
-# encoding issue we hit before)
+# Sensor columns we report stats on. Each key maps to a LIST of possible
+# column name matchers, checked in order -- first one found wins. This
+# covers both naming conventions you may have in play:
+#   1. The NEW standardized names (matching Program.cs's SensorReading
+#      properties exactly: CpuTemp, GpuHotspot, etc.) -- checked first,
+#      since this is where the project is headed.
+#   2. The OLD raw HWiNFO names (e.g. "CPU (Tctl/Tdie)") -- kept as a
+#      fallback so this still works against any not-yet-renamed CSV.
+# Once every CSV is confirmed renamed, the old-name entries can be
+# deleted, but leaving them costs nothing and prevents silent failures
+# in the meantime.
 STAT_SENSOR_MATCHERS = {
-    "cpu_temp": "CPU (Tctl/Tdie)",
-    "gpu_hotspot": "GPU Hot Spot Temperature",
-    "gpu_edge": "GPU Temperature",
-    "cpu_clock": "Core Clocks (avg)",
-    "gpu_clock": "GPU Shader Clock",
+    "cpu_temp": ["CpuTemp", "CPU (Tctl/Tdie)"],
+    "gpu_hotspot": ["GpuHotspot", "GPU Hot Spot Temperature"],
+    "gpu_edge": ["GpuEdge", "GPU Temperature"],
+    "cpu_clock": ["CpuClock", "Core Clocks (avg)"],
+    "gpu_clock": ["GpuClock", "GPU Shader Clock"],
 }
 
 NON_FEATURE_COLUMNS = ["data", "time", "Date", "Time", "scenario", "source_file", "label"]
 
 
-def _resolve_column(df: pd.DataFrame, matcher: str) -> str | None:
-    matches = [c for c in df.columns if c.startswith(matcher)]
-    return matches[0] if matches else None
+def _resolve_column(df: pd.DataFrame, matchers) -> str | None:
+    """Accepts either a single matcher string or a list of matchers to try
+    in order. Returns the first matching column found, or None."""
+    if isinstance(matchers, str):
+        matchers = [matchers]
+    for matcher in matchers:
+        matches = [c for c in df.columns if c.startswith(matcher)]
+        if matches:
+            return matches[0]
+    return None
 
 
 def _one_percent_low(values: pd.Series) -> float:
@@ -84,8 +99,8 @@ def compute_sensor_stats(df: pd.DataFrame) -> dict:
 
     # GPU hotspot-to-edge delta, as a single extra stat (not per-row here,
     # just the worst observed gap during the run)
-    hotspot_col = _resolve_column(df, "GPU Hot Spot Temperature")
-    edge_col = _resolve_column(df, "GPU Temperature")
+    hotspot_col = _resolve_column(df, STAT_SENSOR_MATCHERS["gpu_hotspot"])
+    edge_col = _resolve_column(df, STAT_SENSOR_MATCHERS["gpu_edge"])
     if hotspot_col and edge_col:
         delta = (df[hotspot_col] - df[edge_col]).dropna()
         if not delta.empty:
@@ -153,6 +168,10 @@ def build_summary(df: pd.DataFrame, model_path: str, scenario_label: str = "anal
     the LLM. This is the ONLY function the LLM integration step should
     need to call.
     """
+    # CRITICAL FIX: Automatically inject engineered features (like GpuHotspotDelta)
+    # so the model prediction code has every column it expects!
+    df = engineer_features(df)
+    
     stats = compute_sensor_stats(df)
     predictions = run_model_predictions(df, model_path)
 
@@ -168,7 +187,7 @@ if __name__ == "__main__":
     import sys
     import json
 
-    csv_path = sys.argv[1] if len(sys.argv) > 1 else "Final_plugged.csv"
+    csv_path = sys.argv[1] if len(sys.argv) > 1 else "Final.csv"
     model_path = sys.argv[2] if len(sys.argv) > 2 else "thermal_model_final.joblib"
 
     df = pd.read_csv(csv_path)
