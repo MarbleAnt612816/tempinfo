@@ -27,6 +27,26 @@ using System.Text.Json;
 using System.Threading;
 using LibreHardwareMonitor.Hardware;
 
+// 1. ADDED MANDATORY VISITOR PATTERN
+// This handles traversing sub-hardware objects and forcing an internal refresh
+public class UpdateVisitor : IVisitor
+{
+    public void VisitComputer(IComputer computer)
+    {
+        computer.Traverse(this);
+    }
+
+    public void VisitHardware(IHardware hardware)
+    {
+        hardware.Update();
+        foreach (IHardware subHardware in hardware.SubHardware) 
+            subHardware.Accept(this);
+    }
+
+    public void VisitSensor(ISensor sensor) { }
+    public void VisitParameter(IParameter parameter) { }
+}
+
 class Program
 {
     const int PollIntervalMs = 2000;
@@ -44,6 +64,9 @@ class Program
         HardwareType.GpuNvidia,
         HardwareType.GpuIntel,
     };
+
+    // 2. Instantiate the visitor globally or inside Main
+    static readonly UpdateVisitor Visitor = new UpdateVisitor();
 
     static void Main()
     {
@@ -68,6 +91,7 @@ class Program
 
         while (true)
         {
+            // 3. CRITICAL: Pass the visitor to the poll function
             var reading = PollOnce(computer);
 
             string json = JsonSerializer.Serialize(reading);
@@ -82,9 +106,9 @@ class Program
     {
         var reading = new SensorReading { Timestamp = DateTime.UtcNow.ToString("o") };
 
-        // Collect ALL matching sensor values first, then pick sensibly
-        // (e.g. max temp, average clock) -- this is what makes it
-        // hardware-agnostic instead of relying on one exact sensor name.
+        // 4. CRITICAL: Trigger the full hardware tree traversal before inspecting sensors
+        computer.Accept(Visitor);
+
         var cpuTemps = new List<float>();
         var cpuClocks = new List<float>();
         var cpuPowers = new List<float>();
@@ -95,7 +119,7 @@ class Program
 
         foreach (IHardware hardware in computer.Hardware)
         {
-            hardware.Update();
+            // Note: hardware.Update() here is now safe but redundant because of the visitor above
 
             foreach (ISensor sensor in hardware.Sensors)
             {
@@ -118,8 +142,6 @@ class Program
                             cpuTemps.Add(value);
                             break;
                         case SensorType.Clock:
-                            // Skip bus/reference clocks, keep core clocks --
-                            // "bus" is the one common false-positive across vendors
                             if (!nameLower.Contains("bus"))
                                 cpuClocks.Add(value);
                             break;
@@ -150,19 +172,12 @@ class Program
             }
         }
 
-        // Pick sensible aggregates:
-        // - Temps: use MAX (the hottest reading is the meaningful one for
-        //   thermal diagnostics, regardless of how many temp sensors exist)
-        // - Clocks: use AVERAGE (matches "Core Clocks (avg)" from your
-        //   training data)
-        // - Power/Fan: use MAX (most representative single reading)
         reading.CpuTemp = cpuTemps.Count > 0 ? cpuTemps.Max() : (float?)null;
         reading.CpuClock = cpuClocks.Count > 0 ? cpuClocks.Average() : (float?)null;
         reading.CpuPackagePower = cpuPowers.Count > 0 ? cpuPowers.Max() : (float?)null;
 
         reading.GpuEdge = gpuTemps.Count > 0 ? gpuTemps.Max() : (float?)null;
-        reading.GpuHotspot = gpuHotspotTemps.Count > 0 ? gpuHotspotTemps.Max()
-                              : reading.GpuEdge; // fallback: some GPUs/drivers don't expose a separate hotspot sensor
+        reading.GpuHotspot = gpuHotspotTemps.Count > 0 ? gpuHotspotTemps.Max() : reading.GpuEdge;
         reading.GpuClock = gpuClocks.Count > 0 ? gpuClocks.Average() : (float?)null;
         reading.GpuFanRpm = gpuFans.Count > 0 ? gpuFans.Max() : (float?)null;
 
