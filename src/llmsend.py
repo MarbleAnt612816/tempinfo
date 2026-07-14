@@ -49,7 +49,7 @@ def generate_report_via_api(prompt: str) -> str:
         
         # CORRECTED OFFICIAL STR INTERFACE IDENTIFIER FOR HAIKU 4.5
         message = client.messages.create(
-            model="claude-haiku-4-5",
+            model="claude-haiku-4-5-20251001",
             max_tokens=400,
             temperature=0.4, 
             messages=[
