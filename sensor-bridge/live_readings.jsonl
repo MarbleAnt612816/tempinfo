@@ -1,5 +1,5 @@
-{"Timestamp":"2026-07-14T04:56:23.1512420Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":52,"GpuEdge":62,"GpuClock":1150.4,"GpuFanRpm":614}
-{"Timestamp":"2026-07-14T04:56:25.2008357Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":51,"GpuEdge":62,"GpuClock":1150,"GpuFanRpm":613}
-{"Timestamp":"2026-07-14T04:56:27.2256107Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":51,"GpuEdge":62,"GpuClock":1150.8,"GpuFanRpm":610}
-{"Timestamp":"2026-07-14T04:56:29.2395352Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":51,"GpuEdge":62,"GpuClock":1152.2,"GpuFanRpm":612}
-{"Timestamp":"2026-07-14T04:56:31.2567117Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":51,"GpuEdge":62,"GpuClock":1150.2,"GpuFanRpm":614}
+{"Timestamp":"2026-07-14T04:57:18.0980827Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":52,"GpuEdge":62,"GpuClock":1149.4,"GpuFanRpm":611}
+{"Timestamp":"2026-07-14T04:57:20.1490849Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":52,"GpuEdge":62,"GpuClock":1150.8,"GpuFanRpm":612}
+{"Timestamp":"2026-07-14T04:57:22.1739615Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":52,"GpuEdge":62,"GpuClock":1178.6,"GpuFanRpm":610}
+{"Timestamp":"2026-07-14T04:57:24.2022717Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":52,"GpuEdge":62,"GpuClock":1149.2,"GpuFanRpm":608}
+{"Timestamp":"2026-07-14T04:57:26.2201132Z","CpuTemp":0,"CpuClock":0,"CpuPackagePower":0,"GpuHotspot":52,"GpuEdge":62,"GpuClock":1149,"GpuFanRpm":612}
