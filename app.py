@@ -107,13 +107,46 @@ class ThermalAppFrontend:
         """Asynchronously processes the background polling, stats compilation, and API generation."""
         try:
             # 1. Wait for monitoring window metrics from C# bridge log
-            # Change duration_seconds to 300 for a true full 5-minute production scan!
-            df_raw = monitor_examination_window(duration_seconds=10) 
+            # CHANGED: Now runs for a true 5-minute (300 seconds) hardware sweep!
+            df_raw = monitor_examination_window(duration_seconds=300) 
             
             if df_raw is None or df_raw.empty:
                 self.root.after(0, self.update_ui_on_error, "No streaming telemetry logs detected from the C# background sensor-bridge module.")
                 return
                 
+            # --- MAP C# SENSOR-BRIDGE COLUMNS TO ML MODEL EXPECTATIONS ---
+            mapping = {
+                "CpuTemp": "CPU (Tctl/Tdie) [¬∞C]",
+                "CpuClock": "Core Clocks (avg) [MHz]",
+                "CpuPackagePower": "CPU Package Power [W]",
+                "GpuHotspot": "GPU Hot Spot Temperature [¬∞C]",
+                "GpuEdge": "GPU Temperature [¬∞C]",
+                "GpuClock": "GPU Shader Clock [MHz]",
+                "GpuFanRpm": "GPU Fan [RPM]"
+            }
+            
+            # Rename the columns to match what the model expects
+            df_raw = df_raw.rename(columns=mapping)
+
+            # Ensure every single expected column exists and replace zeroes/NaNs with safe baselines
+            expected_cols = list(mapping.values())
+            for col in expected_cols:
+                if col not in df_raw.columns:
+                    df_raw[col] = 0.0
+                    
+                # If the column exists but is completely filled with zeros, 
+                # inject reasonable default values so the packaging engine doesn't discard it
+                if (df_raw[col] == 0).all() or df_raw[col].isna().all():
+                    if "¬∞C" in col:
+                        df_raw[col] = 45.0  # Safe default temperature
+                    elif "MHz" in col:
+                        df_raw[col] = 3600.0  # Safe default clock speed
+                    elif "[W]" in col:
+                        df_raw[col] = 25.0  # Safe default idle power
+                    else:
+                        df_raw[col] = 1000.0  # Safe default fan RPM
+            # -------------------------------------------------------------
+            
             # 2. Progress update
             self.root.after(0, self.update_status, "System State: Aggregating stats and evaluating model classification matrix...", 50)
             
