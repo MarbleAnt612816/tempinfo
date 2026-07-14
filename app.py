@@ -12,7 +12,6 @@ import os
 from main import monitor_examination_window
 from src.stats_packaging import build_summary
 from src.llmsend import compile_llm_prompt, generate_report_via_api
-
 MODEL_PATH = "training/thermal_model_final.joblib"
 
 class ThermalAppFrontend:

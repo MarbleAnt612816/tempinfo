@@ -21,7 +21,7 @@ three paths are guaranteed to produce identically-shaped summaries.
 import pandas as pd
 import numpy as np
 import joblib
-from src.feature_engineering import engineer_features
+
 
 # Sensor columns we report stats on. Each key maps to a LIST of possible
 # column name matchers, checked in order -- first one found wins. This
@@ -40,6 +40,8 @@ STAT_SENSOR_MATCHERS = {
     "gpu_edge": ["GpuEdge", "GPU Temperature"],
     "cpu_clock": ["CpuClock", "Core Clocks (avg)"],
     "gpu_clock": ["GpuClock", "GPU Shader Clock"],
+    "cpu_package_power": ["CpuPackagePower", "CPU Package Power"],
+    "gpu_fan_rpm": ["GpuFanRpm", "GPU Fan"],
 }
 
 NON_FEATURE_COLUMNS = ["data", "time", "Date", "Time", "scenario", "source_file", "label"]
@@ -168,10 +170,6 @@ def build_summary(df: pd.DataFrame, model_path: str, scenario_label: str = "anal
     the LLM. This is the ONLY function the LLM integration step should
     need to call.
     """
-    # CRITICAL FIX: Automatically inject engineered features (like GpuHotspotDelta)
-    # so the model prediction code has every column it expects!
-    df = engineer_features(df)
-    
     stats = compute_sensor_stats(df)
     predictions = run_model_predictions(df, model_path)
 
