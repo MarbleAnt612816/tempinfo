@@ -12,8 +12,7 @@ import pandas as pd
 import pprint
 
 from src.stats_packaging import build_summary
-# Import the Translator and API call tools
-from src.llm_translator import compile_llm_prompt, generate_report_via_api
+from src.llmsend import compile_llm_prompt, generate_report_via_api
 
 MODEL_PATH = "training/thermal_model_final.joblib"
 SENSOR_BRIDGE_DIR = "sensor-bridge"
@@ -32,9 +31,8 @@ def launch_sensor_bridge() -> subprocess.Popen:
     Launches the C# sensor-bridge as a background process. Each call
     starts a FRESH process, which means Program.cs's own
     `new StreamWriter(path, append: false)` truncates live_readings.jsonl
-    on its own -- this is what makes the old manual Python-side file wipe
-    unnecessary (and removes the file-locking race condition that came
-    with it).
+    on its own -- this is what makes a manual Python-side file wipe
+    unnecessary (and avoids a file-locking race condition).
 
     stdout/stderr are captured (not printed to your console) since
     Program.cs's DEBUG_MODE prints a line per sensor per poll, which
@@ -137,10 +135,10 @@ def execute_diagnostic_pipeline():
     # 3. Translate to Plain English via Claude Haiku 4.5
     print("\n✍️ Compiling telemetry prompt layout...")
     prompt = compile_llm_prompt(summary_dict)
-    
+
     print("📡 Querying Claude Haiku 4.5 for plain-English diagnostics...")
     report = generate_report_via_api(prompt)
-    
+
     print("\n================== FINAL AI USER ASSESSMENT ==================")
     print(report)
     print("==============================================================\n")
