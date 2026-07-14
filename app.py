@@ -92,8 +92,7 @@ class ThermalAppFrontend:
         """Disables UI interaction handles and spins up the processing worker thread."""
         self.analyze_btn.config(state="disabled")
         self.progress_bar["value"] = 10
-        self.status_label.config(text="System State: Polling hardware telemetry values (5-minute window)...", foreground="#0056b3")
-        
+        self.status_label.config(text="System State: Polling hardware telemetry values (5-minute window)...", foreground="#0056b3")        
         # Clear out historic view text placeholder frames safely
         self.text_display.config(state="normal")
         self.text_display.delete("1.0", tk.END)
