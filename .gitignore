@@ -30,3 +30,5 @@ dist/
 dist_old/
 app.spec
 main_check.txt
+
+sensor-bridge/live_readings.jsonl
