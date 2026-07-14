@@ -14,7 +14,7 @@ import pprint
 from src.stats_packaging import build_summary
 from src.llmsend import compile_llm_prompt, generate_report_via_api
 
-MODEL_PATH = "training/thermal_model_final.joblib"
+MODEL_PATH = "models/thermal_model_final.joblib"
 SENSOR_BRIDGE_DIR = "sensor-bridge"
 READINGS_PATH = os.path.join(SENSOR_BRIDGE_DIR, "live_readings.jsonl")
 

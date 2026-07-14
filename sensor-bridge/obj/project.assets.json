@@ -2231,19 +2231,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/aaryavsaju/.nuget/packages/": {}
+    "C:\\Users\\Ravu's New PC\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/aaryavsaju/Desktop/Code/tempinfo/sensor-bridge/sensor-bridge.csproj",
+      "projectUniqueName": "C:\\Users\\Ravu's New PC\\OneDrive\\Documents\\Code\\tempinfo\\sensor-bridge\\sensor-bridge.csproj",
       "projectName": "sensor-bridge",
-      "projectPath": "/Users/aaryavsaju/Desktop/Code/tempinfo/sensor-bridge/sensor-bridge.csproj",
-      "packagesPath": "/Users/aaryavsaju/.nuget/packages/",
-      "outputPath": "/Users/aaryavsaju/Desktop/Code/tempinfo/sensor-bridge/obj/",
+      "projectPath": "C:\\Users\\Ravu's New PC\\OneDrive\\Documents\\Code\\tempinfo\\sensor-bridge\\sensor-bridge.csproj",
+      "packagesPath": "C:\\Users\\Ravu's New PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ravu's New PC\\OneDrive\\Documents\\Code\\tempinfo\\sensor-bridge\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/aaryavsaju/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Ravu's New PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -2296,7 +2296,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.301/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
