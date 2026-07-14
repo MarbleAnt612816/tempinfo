@@ -125,7 +125,18 @@ def execute_diagnostic_pipeline():
     df_raw = monitor_examination_window(duration_seconds=300)
     if df_raw is None:
         return None
-
+    # Rename live sensor-bridge columns to match what the trained model
+    # actually expects (the model was trained on Final_plugged.csv's
+    # original HWiNFO-style column names, not the standardized ones)
+    df_raw = df_raw.rename(columns={
+        "CpuTemp": "CPU (Tctl/Tdie) [¬∞C]",
+        "CpuClock": "Core Clocks (avg) [MHz]",
+        "CpuPackagePower": "CPU Package Power [W]",
+        "GpuHotspot": "GPU Hot Spot Temperature [¬∞C]",
+        "GpuEdge": "GPU Temperature [¬∞C]",
+        "GpuClock": "GPU Shader Clock [MHz]",
+        "GpuFanRpm": "GPU Fan [RPM]",
+    })
     # 2. Package everything using our stats packaging engine
     summary_dict = build_summary(df_raw, MODEL_PATH, scenario_label="Live Diagnostic Scan")
 
@@ -144,7 +155,6 @@ def execute_diagnostic_pipeline():
     print("==============================================================\n")
 
     return report
-
 
 if __name__ == "__main__":
     execute_diagnostic_pipeline()
