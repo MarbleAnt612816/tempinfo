@@ -12,6 +12,8 @@ import pandas as pd
 import pprint
 
 from src.stats_packaging import build_summary
+# Import the Translator and API call tools
+from src.llm_translator import compile_llm_prompt, generate_report_via_api
 
 MODEL_PATH = "training/thermal_model_final.joblib"
 SENSOR_BRIDGE_DIR = "sensor-bridge"
@@ -124,7 +126,7 @@ def execute_diagnostic_pipeline():
     # 1. Launch sensor-bridge and read live streamed telemetry from it
     df_raw = monitor_examination_window(duration_seconds=10)  # Set to 300 for a true 5-min scan!
     if df_raw is None:
-        return
+        return None
 
     # 2. Package everything using our stats packaging engine
     summary_dict = build_summary(df_raw, MODEL_PATH, scenario_label="Live Diagnostic Scan")
@@ -132,7 +134,18 @@ def execute_diagnostic_pipeline():
     print("\n📦 Structured Summary Package Generated for LLM Component:")
     pprint.pprint(summary_dict)
 
-    return summary_dict
+    # 3. Translate to Plain English via Claude Haiku 4.5
+    print("\n✍️ Compiling telemetry prompt layout...")
+    prompt = compile_llm_prompt(summary_dict)
+    
+    print("📡 Querying Claude Haiku 4.5 for plain-English diagnostics...")
+    report = generate_report_via_api(prompt)
+    
+    print("\n================== FINAL AI USER ASSESSMENT ==================")
+    print(report)
+    print("==============================================================\n")
+
+    return report
 
 
 if __name__ == "__main__":
