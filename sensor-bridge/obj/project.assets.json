@@ -1297,7 +1297,7 @@
           }
         }
       },
-      "System.CodeDom/10.0.2": {
+      "System.CodeDom/10.0.9": {
         "type": "package",
         "compile": {
           "lib/net10.0/System.CodeDom.dll": {
@@ -1361,10 +1361,10 @@
           }
         }
       },
-      "System.Management/10.0.2": {
+      "System.Management/10.0.9": {
         "type": "package",
         "dependencies": {
-          "System.CodeDom": "10.0.2"
+          "System.CodeDom": "10.0.9"
         },
         "compile": {
           "lib/net10.0/System.Management.dll": {
@@ -2078,10 +2078,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.CodeDom/10.0.2": {
-      "sha512": "eih1MnL4tnSjHUhzae0dmpu50Sm0s54faHZc8yhzYfmubAubkBIIulYYN28fasD1m41mhl6Cenhs9/F0aLv3FA==",
+    "System.CodeDom/10.0.9": {
+      "sha512": "scH7O8oAuOMyZKOEiOQB3ZVz6x9XkrZNKNeWVCxdvkJHSy4SYXyinGK0o2Rn5LiGh+ovezziT2WCdqWKa7WMKA==",
       "type": "package",
-      "path": "system.codedom/10.0.2",
+      "path": "system.codedom/10.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2102,7 +2102,7 @@
         "lib/net9.0/System.CodeDom.xml",
         "lib/netstandard2.0/System.CodeDom.dll",
         "lib/netstandard2.0/System.CodeDom.xml",
-        "system.codedom.10.0.2.nupkg.sha512",
+        "system.codedom.10.0.9.nupkg.sha512",
         "system.codedom.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -2192,10 +2192,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Management/10.0.2": {
-      "sha512": "eFftuy3i844lVKCb4lJvvjKfcvPVcW8KrAdSaIOcRL42/Fisj46hwUs8Bky+4avzMe5Snm5t7aSayOI1mybYXg==",
+    "System.Management/10.0.9": {
+      "sha512": "8mfTzHLlMHCqFE1+iFGzxRCeCb2gDqvRQtZthuksYB+z546QZaFCiagbJ2KXHe7dy5ZpCUg/usaIqc2DxiemPw==",
       "type": "package",
-      "path": "system.management/10.0.2",
+      "path": "system.management/10.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2219,7 +2219,7 @@
         "runtimes/win/lib/net8.0/System.Management.xml",
         "runtimes/win/lib/net9.0/System.Management.dll",
         "runtimes/win/lib/net9.0/System.Management.xml",
-        "system.management.10.0.2.nupkg.sha512",
+        "system.management.10.0.9.nupkg.sha512",
         "system.management.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -2227,7 +2227,8 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "LibreHardwareMonitorLib >= 0.9.6"
+      "LibreHardwareMonitorLib >= 0.9.6",
+      "System.Management >= 10.0.9"
     ]
   },
   "packageFolders": {
@@ -2278,6 +2279,10 @@
           "LibreHardwareMonitorLib": {
             "target": "Package",
             "version": "[0.9.6, )"
+          },
+          "System.Management": {
+            "target": "Package",
+            "version": "[10.0.9, )"
           }
         },
         "imports": [

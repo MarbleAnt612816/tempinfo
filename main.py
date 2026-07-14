@@ -69,7 +69,7 @@ def wait_for_readings_file(timeout_seconds: int = STARTUP_GRACE_SECONDS) -> bool
     return False
 
 
-def monitor_examination_window(duration_seconds=300):
+def monitor_examination_window(duration_seconds=5):
     """
     Launches the sensor-bridge, watches the C# streaming telemetry
     vector for the assessment window, then shuts the process down.
@@ -121,7 +121,7 @@ def monitor_examination_window(duration_seconds=300):
             process.kill()  # force-kill if it didn't stop cleanly
 def execute_diagnostic_pipeline():
     # 1. Launch sensor-bridge and read live streamed telemetry from it
-    df_raw = monitor_examination_window(duration_seconds=300)
+    df_raw = monitor_examination_window(duration_seconds=5)
     if df_raw is None:
         return None
 

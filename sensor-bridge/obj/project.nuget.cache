@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2ewsN71g59o=",
+  "dgSpecHash": "eCHNuk+1lFA=",
   "success": true,
   "projectFilePath": "C:\\Users\\Ravu's New PC\\OneDrive\\Documents\\Code\\tempinfo\\sensor-bridge\\sensor-bridge.csproj",
   "expectedPackageFiles": [
@@ -27,10 +27,10 @@
     "C:\\Users\\Ravu's New PC\\.nuget\\packages\\runtime.native.system.io.ports\\10.0.3\\runtime.native.system.io.ports.10.0.3.nupkg.sha512",
     "C:\\Users\\Ravu's New PC\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\10.0.3\\runtime.osx-arm64.runtime.native.system.io.ports.10.0.3.nupkg.sha512",
     "C:\\Users\\Ravu's New PC\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\10.0.3\\runtime.osx-x64.runtime.native.system.io.ports.10.0.3.nupkg.sha512",
-    "C:\\Users\\Ravu's New PC\\.nuget\\packages\\system.codedom\\10.0.2\\system.codedom.10.0.2.nupkg.sha512",
+    "C:\\Users\\Ravu's New PC\\.nuget\\packages\\system.codedom\\10.0.9\\system.codedom.10.0.9.nupkg.sha512",
     "C:\\Users\\Ravu's New PC\\.nuget\\packages\\system.io.filesystem.accesscontrol\\5.0.0\\system.io.filesystem.accesscontrol.5.0.0.nupkg.sha512",
     "C:\\Users\\Ravu's New PC\\.nuget\\packages\\system.io.ports\\10.0.3\\system.io.ports.10.0.3.nupkg.sha512",
-    "C:\\Users\\Ravu's New PC\\.nuget\\packages\\system.management\\10.0.2\\system.management.10.0.2.nupkg.sha512"
+    "C:\\Users\\Ravu's New PC\\.nuget\\packages\\system.management\\10.0.9\\system.management.10.0.9.nupkg.sha512"
   ],
   "logs": []
 }
