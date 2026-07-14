@@ -120,12 +120,26 @@ def monitor_examination_window(duration_seconds=10):
         except subprocess.TimeoutExpired:
             process.kill()  # force-kill if it didn't stop cleanly
 
-
 def execute_diagnostic_pipeline():
     # 1. Launch sensor-bridge and read live streamed telemetry from it
     df_raw = monitor_examination_window(duration_seconds=10)  # Set to 300 for a true 5-min scan!
     if df_raw is None:
         return None
+
+    # --- MAP C# SENSOR-BRIDGE COLUMNS TO ML MODEL EXPECTATIONS ---
+    mapping = {
+        "CpuTemp": "CPU (Tctl/Tdie) [¬∞C]",
+        "CpuClock": "Core Clocks (avg) [MHz]",
+        "CpuPackagePower": "CPU Package Power [W]",
+        "GpuHotspot": "GPU Hot Spot Temperature [¬∞C]",
+        "GpuEdge": "GPU Temperature [¬∞C]",
+        "GpuClock": "GPU Shader Clock [MHz]",
+        "GpuFanRpm": "GPU Fan [RPM]"
+    }
+    
+    # Rename the columns to match the model's expected feature names
+    df_raw = df_raw.rename(columns=mapping)
+    # -------------------------------------------------------------
 
     # 2. Package everything using our stats packaging engine
     summary_dict = build_summary(df_raw, MODEL_PATH, scenario_label="Live Diagnostic Scan")
