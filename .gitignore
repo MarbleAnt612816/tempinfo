@@ -25,3 +25,8 @@ Thumbs.db
 sensor-bridge/bin/
 sensor-bridge/obj/
 .env
+build/
+dist/
+dist_old/
+app.spec
+main_check.txt

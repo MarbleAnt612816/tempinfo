@@ -118,45 +118,13 @@ def monitor_examination_window(duration_seconds=300):
             process.wait(timeout=5)
         except subprocess.TimeoutExpired:
             process.kill()  # force-kill if it didn't stop cleanly
+
+
 def execute_diagnostic_pipeline():
     # 1. Launch sensor-bridge and read live streamed telemetry from it
     df_raw = monitor_examination_window(duration_seconds=300)
     if df_raw is None:
         return None
-
-    # Map C# sensor-bridge columns to ML model expectations
-    mapping = {
-        "CpuTemp": "CPU (Tctl/Tdie) [¬∞C]",
-        "CpuClock": "Core Clocks (avg) [MHz]",
-        "CpuPackagePower": "CPU Package Power [W]",
-        "GpuHotspot": "GPU Hot Spot Temperature [¬∞C]",
-        "GpuEdge": "GPU Temperature [¬∞C]",
-        "GpuClock": "GPU Shader Clock [MHz]",
-        "GpuFanRpm": "GPU Fan [RPM]"
-    }
-    
-    # Rename what exists
-    df_raw = df_raw.rename(columns=mapping)
-
-    # --- FORCED BASELINE FILL ---
-    # Ensure every single expected column exists and replace zeroes/NaNs with safe baselines
-    expected_cols = list(mapping.values())
-    for col in expected_cols:
-        if col not in df_raw.columns:
-            df_raw[col] = 0.0
-            
-        # If the column exists but is completely filled with zeros, 
-        # inject reasonable default values so the packaging engine doesn't discard it
-        if (df_raw[col] == 0).all() or df_raw[col].isna().all():
-            if "¬∞C" in col:
-                df_raw[col] = 45.0  # Safe default temperature
-            elif "MHz" in col:
-                df_raw[col] = 3600.0  # Safe default clock speed
-            elif "[W]" in col:
-                df_raw[col] = 25.0  # Safe default idle power
-            else:
-                df_raw[col] = 1000.0  # Safe default fan RPM/other metric
-    # -----------------------------
 
     # 2. Package everything using our stats packaging engine
     summary_dict = build_summary(df_raw, MODEL_PATH, scenario_label="Live Diagnostic Scan")
@@ -176,6 +144,7 @@ def execute_diagnostic_pipeline():
     print("==============================================================\n")
 
     return report
+
 
 if __name__ == "__main__":
     execute_diagnostic_pipeline()
