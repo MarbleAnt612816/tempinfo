@@ -3,8 +3,7 @@ main.py
 The central orchestration layer. Launches the C# sensor-bridge process,
 tails live_readings.jsonl, runs ML triage, and packages diagnostic
 telemetry summary stats using exact dataset headers.
-"""
-import os
+"""import os
 import json
 import time
 import subprocess
@@ -12,8 +11,7 @@ import pandas as pd
 import pprint
 
 from src.stats_packaging import build_summary
-# Import the Translator and API call tools
-from src.llm_translator import compile_llm_prompt, generate_report_via_api
+from src.llmsend import compile_llm_prompt, generate_report_via_api
 
 MODEL_PATH = "training/thermal_model_final.joblib"
 SENSOR_BRIDGE_DIR = "sensor-bridge"
