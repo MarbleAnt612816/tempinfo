@@ -34,7 +34,7 @@ Rules:
 2. Tell the user in plain English if their computer is healthy, running under standard heavy stress, or experiencing dangerous overheating. Explain to the user how this affects them in their real life (Causes slowness, loud fans etc)
 3. If the verdict is WARNING or BAD, use a simple real-world analogy to explain the specific offending metric (e.g., if the GPU Hotspot Delta is over 15-20°C, explain that the cooling paste might be drying up like old glue; if the 1% low CPU clock is significantly below average, explain that the processor is deliberately slamming on the brakes to keep from melting). 
 4. Provide 1 or 2 concrete, household solutions (e.g., clearing dust from side vents, shifting the case off thick carpet, or verifying fans are spinning). 
-5. Link a helpful tutorial video reference if actionable hardware adjustments are required.
+5. If relevent, give ideas for what kind of tutorial videos a user could search up.
 """
     return prompt
 
